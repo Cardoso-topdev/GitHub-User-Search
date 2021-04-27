@@ -19,14 +19,13 @@ const App = () => {
       <AlertState>
         <Router>
           <div className="App">
-            <Navbar title="Github Finder" icon="fab fa-github" />
+            <Navbar title="GitHub User Search" icon="fab fa-github" />
             <div className="container">
               <Alert />
               <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/user/:login" component={User} />
+                <Route exact path="/user/:name" component={User} />
                 <Route exact path="/about" component={About} />
-                <Route path="/about" component={NotFound} />
                 <Route component={NotFound} />
               </Switch>
             </div>

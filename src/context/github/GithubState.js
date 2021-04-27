@@ -2,7 +2,7 @@ import React, {useReducer} from 'react'
 import axios from 'axios'
 import githubContext from './githubContext'
 import githubReducer from './githubReducer'
-import { SEARCH_USERS,SET_LOADING,CLEAR_USERS,GET_REPOS,GET_USER } from '../types'
+import { SEARCH_USERS,SET_LOADING,CLEAR_USERS,GET_REPOS,GET_USER, SET_SEARCH_TEXT } from '../types'
 
 let githubClientId;
 let githubClientSecret;
@@ -26,18 +26,29 @@ const GithubState = props => {
   const [state, dispatch] = useReducer(githubReducer, initialState);
 
   // Search User
-  const searchUsers = async text => {
+  const searchUsers = async (text, pageNum, perPage) => {
     setLoading();
     const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${githubClientId}&client_secret=${githubClientSecret}`
+      `https://api.github.com/search/users?q=${text}&page=${pageNum}&per_page=${perPage}`
+      // `https://api.github.com/search/users?q=${text}&client_id=${githubClientId}&client_secret=${githubClientSecret}`
     );
 
     dispatch({
       type: SEARCH_USERS,
-      payload: res.data.items
+      payload: {
+        data: res.data,
+        searchText: text
+      }
     });
   };
 
+  // Set Search Text
+  const setSearchText = text => {
+    dispatch({
+      type: SET_SEARCH_TEXT,
+      payload: text
+    })
+  }
 
   // Get USer
   const getUser = async userName => {
@@ -70,14 +81,18 @@ const GithubState = props => {
 
   return <githubContext.Provider 
     value={
-      {users: state.users,
-      user: state.user,
-      repos:state.repos,
-      loading: state.loading,
-      searchUsers,
-      userClear,
-      getUser,
-      getUserRepos
+      {
+        users: state.users,
+        user: state.user,
+        repos:state.repos,
+        loading: state.loading,
+        searchText: state.search_text,
+        totalCount: state.total_count,
+        setSearchText,
+        searchUsers,
+        userClear,
+        getUser,
+        getUserRepos
       }
     }
   >

@@ -7,8 +7,8 @@ import githubContext from '../../context/github/githubContext'
 const User = ({match}) => {
   const context = useContext(githubContext) 
   useEffect(() => {
-    context.getUser(match.params.login);
-    context.getUserRepos(match.params.login);
+    context.getUser(match.params.name);
+    context.getUserRepos(match.params.name);
     // eslint-disable-next-line
   },[]);
 
@@ -33,10 +33,6 @@ const User = ({match}) => {
     
     return (
       <Fragment>
-        <Link to="/" className="btn btn-light">
-          Back To Search
-        </Link>
-        Hireable: {' '} {hireable?(<i className="fas fa-check text-success"></i>):(<i className="fas fa-times-circle text-danger"></i>)}
         <div className="card grid-2">
           <div className="all-center">
             <img src={avatar_url} alt="avatar" className="round-img" style={{ width:'150px' }}/>
